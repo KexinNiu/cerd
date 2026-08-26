@@ -1,7 +1,7 @@
-"""Inline the record bundle into the demo page — task 06 preview.
+"""Inline the record bundle into the standalone coverage-audit page.
 
-Reads frontend/demo_template.html, substitutes __CERD_DATA__ with the JSON
-bundle, and writes frontend/demo.html. The output is self-contained: no fetch,
+Reads frontend/audit/audit_template.html, substitutes __CERD_DATA__ with the JSON
+bundle, and writes frontend/audit/audit.html. The output is self-contained: no fetch,
 no external data file, so it works from a file:// path or any static host.
 
 Usage:  python -m pipeline.build_demo_page
@@ -16,8 +16,8 @@ from pipeline.search_pubmed import REPO_ROOT
 
 logger = logging.getLogger(__name__)
 
-TEMPLATE_PATH = REPO_ROOT / "frontend" / "demo_template.html"
-PAGE_PATH = REPO_ROOT / "frontend" / "demo.html"
+TEMPLATE_PATH = REPO_ROOT / "frontend" / "audit" / "audit_template.html"
+PAGE_PATH = REPO_ROOT / "frontend" / "audit" / "audit.html"
 PLACEHOLDER = "__CERD_DATA__"
 
 

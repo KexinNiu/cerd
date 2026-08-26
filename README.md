@@ -16,7 +16,7 @@ self-contained brief for a Claude Code / Cowork session.
 | 03 | LLM extraction pipeline | dry lab | ☐ |
 | 04 | Curator review tool (Streamlit) | dry lab | ☐ |
 | 05 | Normalization + release build + CI | dry lab | ☐ |
-| 06 | Frontend (React, GitHub Pages) | dry lab | ☐ |
+| 06 | Frontend (React, GitHub Pages) | dry lab | ◐ |
 | 07 | Methods docs, licenses, wiki | all | ☐ |
 
 ## Setup
@@ -27,7 +27,15 @@ uv pip install -r requirements.txt
 cp .env.example .env   # fill in keys; .env is gitignored
 ```
 
-Frontend (task 06) needs Node >= 18.
+Frontend (task 06) needs Node >= 18:
+
+```bash
+cd frontend && npm install && npm run dev
+```
+
+`pipeline/build_bundle.py` regenerates `frontend/src/data/cerd_draft.json`,
+which the app imports statically. Deployed to GitHub Pages by
+`.github/workflows/pages.yml` on any push touching `frontend/`.
 
 Scope v1: E. coli, B. subtilis, S. cerevisiae, C. elegans × UV, temperature.
 Data: CC-BY 4.0. Code: MIT.

@@ -1,8 +1,9 @@
 """Bundle draft records into a single JSON payload for the frontend.
 
-Emits data/records/bundle.json — the static payload the demo page reads.
-Only fields the UI needs are kept; source_quote is dropped (verification
-lives in the review tool, not the public page).
+Emits data/records/bundle.json and a copy at frontend/src/data/cerd_draft.json,
+which the Vite app imports statically. Only fields the UI needs are kept.
+source_quote is included because the task 06 hover card shows it; the schema
+caps it at 300 characters, well inside fair quotation.
 
 Usage:  python -m pipeline.build_bundle
 """
@@ -20,13 +21,16 @@ logger = logging.getLogger(__name__)
 
 DRAFTS_DIR = REPO_ROOT / "data" / "records" / "drafts"
 OUT_PATH = REPO_ROOT / "data" / "records" / "bundle.json"
+# The Vite app imports this statically — no fetch, no backend.
+FRONTEND_PATH = REPO_ROOT / "frontend" / "src" / "data" / "cerd_draft.json"
 
 UI_FIELDS = (
     "record_id", "organism", "taxid", "strain", "condition", "uv_band",
     "dose_value", "dose_unit", "temp_c", "temp_shift", "exposure_time_s",
     "medium", "growth_phase", "assay", "response_type", "response_value",
     "response_unit", "response_direction", "mechanism_reported",
-    "evidence_level", "source_doi", "source_pmid", "verified_by", "notes",
+    "evidence_level", "source_doi", "source_pmid", "source_quote",
+    "verified_by", "notes",
 )
 
 
@@ -73,7 +77,10 @@ def build() -> dict[str, Any]:
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     bundle = build()
-    OUT_PATH.write_text(json.dumps(bundle, indent=1, ensure_ascii=False) + "\n")
+    payload = json.dumps(bundle, indent=1, ensure_ascii=False) + "\n"
+    OUT_PATH.write_text(payload)
+    FRONTEND_PATH.parent.mkdir(parents=True, exist_ok=True)
+    FRONTEND_PATH.write_text(payload)
     meta = bundle["meta"]
     logger.info(
         f"wrote {OUT_PATH}: {meta['record_count']} records, "
