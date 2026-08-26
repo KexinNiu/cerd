@@ -1,0 +1,327 @@
+{
+  "$defs": {
+    "Assay": {
+      "enum": [
+        "CFU",
+        "OD",
+        "spot_assay",
+        "survival_curve",
+        "microscopy",
+        "other"
+      ],
+      "title": "Assay",
+      "type": "string"
+    },
+    "Condition": {
+      "enum": [
+        "UV",
+        "temperature"
+      ],
+      "title": "Condition",
+      "type": "string"
+    },
+    "EvidenceLevel": {
+      "enum": [
+        "measured",
+        "inferred",
+        "speculated"
+      ],
+      "title": "EvidenceLevel",
+      "type": "string"
+    },
+    "ResponseType": {
+      "enum": [
+        "survival",
+        "growth_rate",
+        "growth_inhibition",
+        "recovery_time",
+        "expression_change",
+        "morphology",
+        "other"
+      ],
+      "title": "ResponseType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "One extracted, human-verifiable observation from one paper.",
+  "properties": {
+    "record_id": {
+      "pattern": "^[a-z0-9-]+$",
+      "title": "Record Id",
+      "type": "string"
+    },
+    "organism": {
+      "title": "Organism",
+      "type": "string"
+    },
+    "taxid": {
+      "exclusiveMinimum": 0,
+      "title": "Taxid",
+      "type": "integer"
+    },
+    "strain": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Strain"
+    },
+    "condition": {
+      "$ref": "#/$defs/Condition"
+    },
+    "uv_band": {
+      "anyOf": [
+        {
+          "enum": [
+            "UV-A",
+            "UV-B",
+            "UV-C"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Uv Band"
+    },
+    "dose_value": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dose Value"
+    },
+    "dose_unit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dose Unit"
+    },
+    "temp_c": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temp C"
+    },
+    "temp_shift": {
+      "anyOf": [
+        {
+          "enum": [
+            "heat_shock",
+            "cold_shock",
+            "constant"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temp Shift"
+    },
+    "exposure_time_s": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Exposure Time S"
+    },
+    "medium": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Medium"
+    },
+    "growth_phase": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Growth Phase"
+    },
+    "assay": {
+      "$ref": "#/$defs/Assay"
+    },
+    "response_type": {
+      "$ref": "#/$defs/ResponseType"
+    },
+    "response_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Response Value"
+    },
+    "response_unit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Response Unit"
+    },
+    "response_direction": {
+      "anyOf": [
+        {
+          "enum": [
+            "increase",
+            "decrease",
+            "none"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Response Direction"
+    },
+    "mechanism_reported": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Mechanism Reported",
+      "type": "array"
+    },
+    "evidence_level": {
+      "$ref": "#/$defs/EvidenceLevel"
+    },
+    "source_doi": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Doi"
+    },
+    "source_pmid": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Pmid"
+    },
+    "source_quote": {
+      "maxLength": 300,
+      "title": "Source Quote",
+      "type": "string"
+    },
+    "extracted_by": {
+      "default": "llm",
+      "title": "Extracted By",
+      "type": "string"
+    },
+    "verified_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified By"
+    },
+    "verified_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified Date"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    }
+  },
+  "required": [
+    "record_id",
+    "organism",
+    "taxid",
+    "condition",
+    "assay",
+    "response_type",
+    "evidence_level",
+    "source_quote"
+  ],
+  "title": "Record",
+  "type": "object"
+}
