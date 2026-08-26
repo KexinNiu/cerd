@@ -1,0 +1,777 @@
+<title>CERD Draft Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    color-scheme: light;
+    --ground:        #f2f4f1;
+    --surface:       #fcfcfb;
+    --surface-sunk:  #e9ece8;
+    --line:          #d3d8d0;
+    --line-soft:     #e4e8e2;
+    --ink:           #0b0b0b;
+    --ink-2:         #52514e;
+    --ink-3:         #7b7f78;
+    --measured:      #2a78d6;
+    --inferred:      #eb6834;
+    --warning:       #fab219;
+    --warning-ink:   #7a5200;
+    --critical:      #d03b3b;
+    --grid:          #e4e8e2;
+    --axis:          #b9bfb5;
+
+    --step--1: 0.78rem;
+    --step-0:  0.95rem;
+    --step-1:  1.15rem;
+    --step-2:  1.6rem;
+    --step-3:  2.6rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground:       #121412;
+      --surface:      #1a1a19;
+      --surface-sunk: #0e100e;
+      --line:         #33372f;
+      --line-soft:    #262a24;
+      --ink:          #ffffff;
+      --ink-2:        #c3c2b7;
+      --ink-3:        #8b8e84;
+      --measured:     #3987e5;
+      --inferred:     #d95926;
+      --warning:      #fab219;
+      --warning-ink:  #fab219;
+      --critical:     #d03b3b;
+      --grid:         #262a24;
+      --axis:         #4a4f45;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground:       #121412;
+    --surface:      #1a1a19;
+    --surface-sunk: #0e100e;
+    --line:         #33372f;
+    --line-soft:    #262a24;
+    --ink:          #ffffff;
+    --ink-2:        #c3c2b7;
+    --ink-3:        #8b8e84;
+    --measured:     #3987e5;
+    --inferred:     #d95926;
+    --warning:      #fab219;
+    --warning-ink:  #fab219;
+    --critical:     #d03b3b;
+    --grid:         #262a24;
+    --axis:         #4a4f45;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size: var(--step-0);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 2.5rem) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead { display: flex; flex-direction: column; gap: 0.9rem; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  h1 {
+    font-family: Newsreader, Georgia, serif;
+    font-size: var(--step-3);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--ink-2);
+    font-size: var(--step-1);
+  }
+
+  .banner {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.9rem 1.05rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warning);
+    border-radius: 4px;
+  }
+  .banner svg { flex: none; margin-top: 0.15rem; }
+  .banner b { color: var(--warning-ink); }
+  .banner p { margin: 0; font-size: var(--step--1); color: var(--ink-2); }
+
+  /* ---------- stat row ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat { background: var(--surface); padding: 1rem 1.1rem; }
+  .stat dt {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 0.35rem;
+  }
+  .stat dd {
+    margin: 0;
+    font-family: Newsreader, Georgia, serif;
+    font-size: var(--step-2);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .stat dd small {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    margin-left: 0.3rem;
+  }
+
+  /* ---------- sections ---------- */
+  section { display: flex; flex-direction: column; gap: 1rem; }
+  h2 {
+    font-family: Newsreader, Georgia, serif;
+    font-size: var(--step-2);
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .section-note {
+    margin: 0;
+    max-width: 68ch;
+    color: var(--ink-2);
+    font-size: var(--step--1);
+  }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.6rem;
+  }
+
+  .legend {
+    display: flex;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    color: var(--ink-2);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .swatch {
+    width: 10px; height: 10px; border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--surface);
+  }
+
+  /* ---------- chart grid ---------- */
+  .panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .panel {
+    background: var(--surface);
+    padding: 0.95rem 0.9rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+  .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+  .panel-title {
+    font-family: Newsreader, Georgia, serif;
+    font-style: italic;
+    font-size: var(--step-1);
+    line-height: 1.15;
+  }
+  .panel-count {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .panel svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .empty-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 150px;
+    padding: 0.75rem;
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    background: var(--surface-sunk);
+    border-radius: 3px;
+  }
+  .dot { cursor: pointer; }
+  .dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---------- tooltip ---------- */
+  #tip {
+    position: fixed;
+    z-index: 40;
+    max-width: 300px;
+    padding: 0.6rem 0.7rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.16);
+    font-size: var(--step--1);
+    line-height: 1.45;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.1s;
+  }
+  #tip[data-open="true"] { opacity: 1; }
+  #tip .t-org { font-family: Newsreader, Georgia, serif; font-style: italic; font-size: var(--step-0); }
+  #tip dl { margin: 0.4rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.7rem; }
+  #tip dt { color: var(--ink-3); font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  #tip dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+  /* ---------- tables ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+  th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+  thead th {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; }
+  td.num { font-variant-numeric: tabular-nums; font-family: "IBM Plex Mono", monospace; }
+  td.org { font-family: Newsreader, Georgia, serif; font-style: italic; }
+  .zero { color: var(--critical); }
+
+  .bar-cell { display: flex; align-items: center; gap: 0.5rem; }
+  .bar {
+    height: 8px;
+    background: var(--measured);
+    border-radius: 0 2px 2px 0;
+    min-width: 2px;
+  }
+
+  details > summary {
+    cursor: pointer;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: var(--step--1);
+    color: var(--ink-2);
+    padding: 0.4rem 0;
+  }
+  details > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.1rem;
+    color: var(--ink-3);
+    font-size: var(--step--1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">iGEM · Comparative Environmental Response Database</p>
+    <h1>What the first extraction pass actually found</h1>
+    <p class="lede">
+      175 stress-response measurements pulled from 24 open-access papers by an LLM
+      extractor, then re-checked against the source text. This page exists to show
+      the team where the data supports a dose–response curve and where it does not.
+    </p>
+    <div class="banner">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M8 1.6 15 14H1L8 1.6Z" fill="none" stroke="var(--warning)" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M8 6v3.6" stroke="var(--warning)" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="8" cy="11.8" r="0.9" fill="var(--warning)"/>
+      </svg>
+      <p>
+        <b>Unverified draft data.</b> Every record here was extracted by a language
+        model and has <code>verified_by: null</code>. No organism curator has signed
+        off yet, so nothing on this page is releasable — it is a look at the pipeline's
+        output, not a result.
+      </p>
+    </div>
+  </header>
+
+  <dl class="stats" id="stats"></dl>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>UV dose–response</h2>
+      </div>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--measured)"></i>measured</span>
+        <span><i class="swatch" style="background:var(--inferred)"></i>author-derived</span>
+      </div>
+    </div>
+    <p class="section-note">
+      Dose converted to J/m² and survival to percent of the untreated control by
+      <code>pipeline/normalize.py</code>. Both axes are logarithmic — UV inactivation
+      spans orders of magnitude. Each point is one measurement at one dose; hover for
+      the strain, assay and source.
+    </p>
+    <div class="panels" id="uv-panels"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Temperature response</h2>
+      </div>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--measured)"></i>measured</span>
+        <span><i class="swatch" style="background:var(--inferred)"></i>author-derived</span>
+      </div>
+    </div>
+    <p class="section-note">
+      Survival against exposure temperature in °C. The spread is far thinner than the
+      UV side: most temperature papers report lifespan in days or growth rate per hour,
+      neither of which is a survival percentage.
+    </p>
+    <div class="panels" id="temp-panels"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Coverage by cell</h2></div>
+    <p class="section-note">
+      All 175 records, including the ones that cannot go on the axes above. The
+      <em>levels</em> column counts distinct doses or temperatures — a cell with one
+      level cannot produce a curve no matter how many records it holds.
+    </p>
+    <div class="table-scroll">
+      <table id="coverage">
+        <thead>
+          <tr>
+            <th scope="col">Organism</th>
+            <th scope="col">Condition</th>
+            <th scope="col">Records</th>
+            <th scope="col" class="num">Papers</th>
+            <th scope="col" class="num">Levels</th>
+            <th scope="col" class="num">On the chart</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Why 122 records are off the charts</h2></div>
+    <p class="section-note">
+      Not a failure of extraction — the papers simply report different things. This is
+      the argument for either widening the response types the site plots, or screening
+      harder for survival-assay papers in the next round.
+    </p>
+    <div class="table-scroll">
+      <table id="reasons">
+        <thead>
+          <tr>
+            <th scope="col">Reason</th>
+            <th scope="col" class="num">Records</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <details>
+      <summary>Table view — all 175 records</summary>
+      <div class="table-scroll" style="max-height: 460px; overflow-y: auto; margin-top: 0.6rem;">
+        <table id="all-records">
+          <thead>
+            <tr>
+              <th scope="col">Organism</th>
+              <th scope="col">Strain</th>
+              <th scope="col">Condition</th>
+              <th scope="col">Level</th>
+              <th scope="col">Assay</th>
+              <th scope="col">Response</th>
+              <th scope="col">Value</th>
+              <th scope="col">Evidence</th>
+              <th scope="col">Source</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <span>Data CC-BY 4.0 · Code MIT</span>
+    <span>Records: <code>data/records/drafts/</code></span>
+    <span>Schema: <code>schema/record_schema.py</code></span>
+  </footer>
+</div>
+
+<div id="tip" role="tooltip" aria-hidden="true"></div>
+
+<script id="cerd-data" type="application/json">__CERD_DATA__</script>
+<script>
+(() => {
+  "use strict";
+  const BUNDLE = JSON.parse(document.getElementById("cerd-data").textContent);
+  const RECORDS = BUNDLE.records;
+  const ORGANISMS = BUNDLE.meta.organisms;
+
+  const isUVPoint = r => r.dose_j_m2 != null && r.survival_pct != null;
+  const isTempPoint = r =>
+    r.condition === "temperature" && r.temp_c != null && r.survival_pct != null;
+
+  /* ---------- stat row ---------- */
+  const uvPoints = RECORDS.filter(isUVPoint);
+  const tempPoints = RECORDS.filter(isTempPoint);
+  const stats = [
+    ["records", BUNDLE.meta.record_count, ""],
+    ["papers", BUNDLE.meta.paper_count, "open access"],
+    ["organisms", ORGANISMS.length, "of 4 planned"],
+    ["plottable", uvPoints.length + tempPoints.length, "dose–survival"],
+    ["curator-verified", BUNDLE.meta.verified_count, "none yet"],
+  ];
+  document.getElementById("stats").innerHTML = stats
+    .map(([label, value, note]) => `
+      <div class="stat">
+        <dt>${label}</dt>
+        <dd>${value}${note ? `<small>${note}</small>` : ""}</dd>
+      </div>`)
+    .join("");
+
+  /* ---------- scales ---------- */
+  const W = 300, H = 210;
+  const M = { top: 24, right: 12, bottom: 34, left: 42 };
+  const iw = W - M.left - M.right;
+  const ih = H - M.top - M.bottom;
+
+  const FLOOR = 1e-4;   // survival axis floor; 0% is plotted here and flagged
+  const logScale = (min, max, size) => v =>
+    (Math.log10(Math.max(v, min)) - Math.log10(min)) /
+    (Math.log10(max) - Math.log10(min)) * size;
+  const linScale = (min, max, size) => v => (v - min) / (max - min) * size;
+
+  const niceDecades = (min, max) => {
+    const lo = Math.floor(Math.log10(min)), hi = Math.ceil(Math.log10(max));
+    const out = [];
+    for (let e = lo; e <= hi; e++) out.push(10 ** e);
+    return out;
+  };
+  const fmtDose = v =>
+    v >= 1000 ? `${(v / 1000).toLocaleString("en", {maximumFractionDigits: 0})}k` : `${v}`;
+  const fmtPct = v => (v >= 1 ? `${v}` : v >= 0.01 ? `${v}` : v.toExponential(0));
+
+  /* ---------- tooltip ---------- */
+  const tip = document.getElementById("tip");
+  const showTip = (evt, r) => {
+    const level = r.condition === "UV"
+      ? `${r.dose_value} ${r.dose_unit} (${Math.round(r.dose_j_m2)} J/m²)`
+      : `${r.temp_c} °C${r.temp_shift ? ` · ${r.temp_shift.replace("_", " ")}` : ""}`;
+    const src = r.source_doi
+      ? `doi:${r.source_doi}`
+      : r.source_pmid ? `PMID ${r.source_pmid}` : "—";
+    tip.innerHTML = `
+      <div class="t-org">${r.organism}</div>
+      <dl>
+        <dt>strain</dt><dd>${r.strain || "not stated"}</dd>
+        <dt>${r.condition === "UV" ? "dose" : "temp"}</dt><dd>${level}</dd>
+        <dt>survival</dt><dd>${r.survival_pct <= 0
+          ? "0 % (below detection)"
+          : `${Number(r.survival_pct.toPrecision(3))} %`}</dd>
+        <dt>reported</dt><dd>${r.response_value} ${r.response_unit || ""}</dd>
+        <dt>assay</dt><dd>${r.assay}</dd>
+        <dt>evidence</dt><dd>${r.evidence_level}</dd>
+        <dt>source</dt><dd>${src}</dd>
+      </dl>`;
+    tip.dataset.open = "true";
+    tip.setAttribute("aria-hidden", "false");
+    const pad = 14;
+    const box = tip.getBoundingClientRect();
+    let x = evt.clientX + pad, y = evt.clientY + pad;
+    if (x + box.width > innerWidth - 8) x = evt.clientX - box.width - pad;
+    if (y + box.height > innerHeight - 8) y = evt.clientY - box.height - pad;
+    tip.style.left = `${Math.max(8, x)}px`;
+    tip.style.top = `${Math.max(8, y)}px`;
+  };
+  const hideTip = () => {
+    tip.dataset.open = "false";
+    tip.setAttribute("aria-hidden", "true");
+  };
+
+  /* ---------- panel rendering ---------- */
+  const svgEl = (name, attrs) => {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    return el;
+  };
+
+  function renderPanel(container, organism, points, opts) {
+    const panel = document.createElement("div");
+    panel.className = "panel";
+    panel.innerHTML = `
+      <div class="panel-head">
+        <span class="panel-title">${organism}</span>
+        <span class="panel-count">${points.length ? `${points.length} pts` : "no data"}</span>
+      </div>`;
+
+    if (!points.length) {
+      const note = document.createElement("p");
+      note.className = "empty-note";
+      note.textContent = opts.emptyNote;
+      panel.appendChild(note);
+      container.appendChild(panel);
+      return;
+    }
+
+    const svg = svgEl("svg", {
+      viewBox: `0 0 ${W} ${H}`,
+      role: "img",
+      "aria-label": `${organism}: ${points.length} ${opts.axisLabel} points`,
+    });
+    const g = svgEl("g", { transform: `translate(${M.left},${M.top})` });
+
+    const yTicks = niceDecades(FLOOR, 100);
+    const y = logScale(FLOOR, 100, ih);
+    const xVals = points.map(opts.xOf);
+    let x, xTicks;
+    if (opts.logX) {
+      const xmin = Math.max(1, Math.min(...xVals)) / 1.6;
+      const xmax = Math.max(...xVals) * 1.6;
+      x = logScale(xmin, xmax, iw);
+      xTicks = niceDecades(xmin, xmax).filter(t => t >= xmin && t <= xmax);
+    } else {
+      const lo = Math.min(...xVals), hi = Math.max(...xVals);
+      if (hi - lo < 1e-9) {
+        // One temperature only — a single labelled tick, no invented spread.
+        x = () => iw / 2;
+        xTicks = [lo];
+      } else {
+        const pad = (hi - lo) * 0.14;
+        const xmin = lo - pad, xmax = hi + pad;
+        x = linScale(xmin, xmax, iw);
+        const step = (hi - lo) / 3;
+        xTicks = [...new Set([0, 1, 2, 3].map(i => Math.round(lo + step * i)))];
+      }
+    }
+
+    // grid + y axis
+    for (const t of yTicks) {
+      const yy = ih - y(t);
+      g.appendChild(svgEl("line", {
+        x1: 0, x2: iw, y1: yy, y2: yy,
+        stroke: "var(--grid)", "stroke-width": 1,
+      }));
+      const label = svgEl("text", {
+        x: -7, y: yy + 3.5, "text-anchor": "end",
+        fill: "var(--ink-3)", "font-size": 9,
+        "font-family": "IBM Plex Mono, monospace",
+      });
+      label.textContent = fmtPct(t);
+      g.appendChild(label);
+    }
+    // x axis
+    g.appendChild(svgEl("line", {
+      x1: 0, x2: iw, y1: ih, y2: ih, stroke: "var(--axis)", "stroke-width": 1,
+    }));
+    for (const t of xTicks) {
+      const xx = x(t);
+      const label = svgEl("text", {
+        x: xx, y: ih + 14, "text-anchor": "middle",
+        fill: "var(--ink-3)", "font-size": 9,
+        "font-family": "IBM Plex Mono, monospace",
+      });
+      label.textContent = opts.fmtX(t);
+      g.appendChild(label);
+    }
+    const xTitle = svgEl("text", {
+      x: iw / 2, y: ih + 29, "text-anchor": "middle",
+      fill: "var(--ink-3)", "font-size": 9.5,
+    });
+    xTitle.textContent = opts.axisLabel;
+    g.appendChild(xTitle);
+
+    const yTitle = svgEl("text", {
+      x: -M.left + 2, y: -11, "text-anchor": "start",
+      fill: "var(--ink-3)", "font-size": 9.5,
+    });
+    yTitle.textContent = "survival %";
+    g.appendChild(yTitle);
+
+    // marks — 2px surface ring keeps overlapping points readable
+    for (const r of points) {
+      const cx = x(opts.xOf(r));
+      const cy = ih - y(r.survival_pct <= 0 ? FLOOR : r.survival_pct);
+      const color = r.evidence_level === "inferred"
+        ? "var(--inferred)" : "var(--measured)";
+      const dot = svgEl("circle", {
+        cx, cy, r: 4.5, fill: color,
+        stroke: "var(--surface)", "stroke-width": 2,
+        class: "dot", tabindex: "0", role: "button",
+        "aria-label": `${r.organism}, ${opts.a11y(r)}, survival ${
+          r.survival_pct <= 0 ? 0 : Number(r.survival_pct.toPrecision(3))} percent`,
+      });
+      if (r.survival_pct <= 0) dot.setAttribute("stroke-dasharray", "2 2");
+      dot.addEventListener("mouseenter", e => showTip(e, r));
+      dot.addEventListener("mousemove", e => showTip(e, r));
+      dot.addEventListener("mouseleave", hideTip);
+      dot.addEventListener("focus", e => {
+        const b = dot.getBoundingClientRect();
+        showTip({ clientX: b.left + b.width / 2, clientY: b.top }, r);
+      });
+      dot.addEventListener("blur", hideTip);
+      g.appendChild(dot);
+    }
+
+    svg.appendChild(g);
+    panel.appendChild(svg);
+    container.appendChild(panel);
+  }
+
+  const uvHost = document.getElementById("uv-panels");
+  for (const org of ORGANISMS) {
+    renderPanel(uvHost, org, uvPoints.filter(r => r.organism === org), {
+      xOf: r => r.dose_j_m2,
+      logX: true,
+      fmtX: fmtDose,
+      axisLabel: "UV dose (J/m²)",
+      a11y: r => `${Math.round(r.dose_j_m2)} joules per square metre`,
+      emptyNote: "No UV survival percentages. This organism's UV papers report lifespan in days, which is not a survival fraction.",
+    });
+  }
+
+  const tempHost = document.getElementById("temp-panels");
+  for (const org of ORGANISMS) {
+    renderPanel(tempHost, org, tempPoints.filter(r => r.organism === org), {
+      xOf: r => r.temp_c,
+      logX: false,
+      fmtX: t => `${t}°`,
+      axisLabel: "temperature (°C)",
+      a11y: r => `${r.temp_c} degrees Celsius`,
+      emptyNote: "No temperature survival percentages — this organism's heat records are growth rates or reporter activity.",
+    });
+  }
+
+  /* ---------- coverage table ---------- */
+  const cells = new Map();
+  for (const r of RECORDS) {
+    const key = `${r.organism}|${r.condition}`;
+    if (!cells.has(key)) {
+      cells.set(key, { organism: r.organism, condition: r.condition,
+                       n: 0, papers: new Set(), levels: new Set(), plotted: 0 });
+    }
+    const c = cells.get(key);
+    c.n++;
+    c.papers.add(r.source_pmid || r.source_doi);
+    const level = r.condition === "UV" ? r.dose_value : r.temp_c;
+    if (level != null) c.levels.add(level);
+    if (isUVPoint(r) || isTempPoint(r)) c.plotted++;
+  }
+  const maxN = Math.max(...[...cells.values()].map(c => c.n));
+  document.querySelector("#coverage tbody").innerHTML = [...cells.values()]
+    .sort((a, b) => a.organism.localeCompare(b.organism) ||
+                    a.condition.localeCompare(b.condition))
+    .map(c => `
+      <tr>
+        <td class="org">${c.organism}</td>
+        <td>${c.condition}</td>
+        <td class="num">
+          <span class="bar-cell">
+            <span class="bar" style="width:${Math.round(c.n / maxN * 46)}px"></span>${c.n}
+          </span>
+        </td>
+        <td class="num">${c.papers.size}</td>
+        <td class="num">${c.levels.size}</td>
+        <td class="num${c.plotted === 0 ? " zero" : ""}">${c.plotted}</td>
+      </tr>`)
+    .join("");
+
+  /* ---------- reasons table ---------- */
+  const reasons = new Map();
+  const bump = k => reasons.set(k, (reasons.get(k) || 0) + 1);
+  for (const r of RECORDS) {
+    if (isUVPoint(r) || isTempPoint(r)) continue;
+    if (r.response_value == null) bump("Value exists only in a figure — never estimated off axes");
+    else if (r.response_type !== "survival") bump(`Response is ${r.response_type.replace("_", " ")}, not survival`);
+    else if (r.condition === "UV" && r.dose_j_m2 == null) bump(`Dose in ${r.dose_unit} — volumetric, no areal equivalent`);
+    else if (r.survival_pct == null) bump(`Survival reported in ${r.response_unit}`);
+    else bump("Other");
+  }
+  document.querySelector("#reasons tbody").innerHTML = [...reasons.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([reason, n]) => `<tr><td style="white-space:normal">${reason}</td><td class="num">${n}</td></tr>`)
+    .join("");
+
+  /* ---------- full table ---------- */
+  document.querySelector("#all-records tbody").innerHTML = RECORDS
+    .map(r => {
+      const level = r.condition === "UV"
+        ? (r.dose_value != null ? `${r.dose_value} ${r.dose_unit || ""}` : "—")
+        : (r.temp_c != null ? `${r.temp_c} °C` : "—");
+      const src = r.source_doi ? `doi:${r.source_doi}` : `PMID ${r.source_pmid}`;
+      return `<tr>
+        <td class="org">${r.organism}</td>
+        <td>${r.strain || "—"}</td>
+        <td>${r.condition}</td>
+        <td class="num">${level}</td>
+        <td>${r.assay}</td>
+        <td>${r.response_type.replace("_", " ")}</td>
+        <td class="num">${r.response_value != null ? r.response_value : "—"} ${r.response_unit || ""}</td>
+        <td>${r.evidence_level}</td>
+        <td>${src}</td>
+      </tr>`;
+    })
+    .join("");
+
+  addEventListener("scroll", hideTip, { passive: true });
+})();
+</script>
