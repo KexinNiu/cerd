@@ -1,0 +1,8 @@
+biopython
+requests
+pydantic>=2
+anthropic
+streamlit
+pandas
+pytest
+lxml

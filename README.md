@@ -10,7 +10,7 @@ self-contained brief for a Claude Code / Cowork session.
 
 | # | Task | Owner | Status |
 |---|------|-------|--------|
-| 00 | Environment setup (local, IBEX decision) | dry lab | ☐ |
+| 00 | Environment setup (local, IBEX decision) | dry lab | ☑ |
 | 01 | Schema finalization + team sign-off | dry lab + all | ☐ |
 | 02 | Literature search & screening | dry lab + curators | ☐ |
 | 03 | LLM extraction pipeline | dry lab | ☐ |
@@ -18,6 +18,16 @@ self-contained brief for a Claude Code / Cowork session.
 | 05 | Normalization + release build + CI | dry lab | ☐ |
 | 06 | Frontend (React, GitHub Pages) | dry lab | ☐ |
 | 07 | Methods docs, licenses, wiki | all | ☐ |
+
+## Setup
+
+```bash
+uv venv --python 3.11
+uv pip install -r requirements.txt
+cp .env.example .env   # fill in keys; .env is gitignored
+```
+
+Frontend (task 06) needs Node >= 18.
 
 Scope v1: E. coli, B. subtilis, S. cerevisiae, C. elegans × UV, temperature.
 Data: CC-BY 4.0. Code: MIT.
