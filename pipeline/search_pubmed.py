@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import http.client
 import logging
 import time
 from dataclasses import dataclass
@@ -94,7 +95,7 @@ def _entrez_read(make_handle, cfg: EntrezConfig, retries: int = 3):
                 result = Entrez.read(handle)
             time.sleep(cfg.delay_s)
             return result
-        except (OSError, RuntimeError, ValueError) as e:
+        except (OSError, http.client.HTTPException, RuntimeError, ValueError) as e:
             if attempt == retries:
                 raise
             wait = 5 * attempt
@@ -104,9 +105,20 @@ def _entrez_read(make_handle, cfg: EntrezConfig, retries: int = 3):
 
 
 def search_pmids(query: str, retmax: int, cfg: EntrezConfig) -> list[str]:
+    """Top-`retmax` PMIDs by PubMed relevance ranking.
+
+    Default esearch order is newest-first, which silently truncates away the
+    classic dose-response literature — relevance sort is essential here.
+    """
     result = _entrez_read(
-        lambda: Entrez.esearch(db="pubmed", term=query, retmax=retmax), cfg
+        lambda: Entrez.esearch(
+            db="pubmed", term=query, retmax=retmax, sort="relevance"
+        ),
+        cfg,
     )
+    total = int(result["Count"])
+    if total > retmax:
+        logger.info(f"  ({total} total hits, keeping top {retmax} by relevance)")
     return list(result["IdList"])
 
 
@@ -198,7 +210,12 @@ def build_cell(
     org_key: str, cond_key: str, retmax: int, cfg: EntrezConfig
 ) -> list[dict[str, str]]:
     organism = ORGANISMS[org_key]
-    query = f'"{organism}"[TIAB] AND {CONDITION_TERMS[cond_key]}'
+    # Reviews are excluded up front — the screening criteria require primary
+    # research, so this is a hard criterion, not automated relevance screening.
+    query = (
+        f'"{organism}"[TIAB] AND {CONDITION_TERMS[cond_key]} '
+        "NOT Review[Publication Type]"
+    )
     logger.info(f"[{org_key} x {cond_key}] query: {query}")
     pmids = search_pmids(query, retmax, cfg)
     logger.info(f"[{org_key} x {cond_key}] {len(pmids)} PMIDs")
