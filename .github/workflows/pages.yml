@@ -26,6 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Resolves the Pages base path and fails loudly if Pages is not enabled.
+      - uses: actions/configure-pages@v5
+        id: pages
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -36,8 +40,9 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
         env:
-          # Project pages serve from https://<user>.github.io/<repo>/
-          CERD_BASE: /${{ github.event.repository.name }}/
+          # base_path is "/<repo>" for a project site and "" for a user site;
+          # the trailing slash makes both valid Vite bases.
+          CERD_BASE: ${{ steps.pages.outputs.base_path }}/
 
       - uses: actions/upload-pages-artifact@v3
         with:
