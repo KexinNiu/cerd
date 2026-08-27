@@ -14,7 +14,7 @@ self-contained brief for a Claude Code / Cowork session.
 | 01 | Schema finalization + team sign-off | dry lab + all | ☐ |
 | 02 | Literature search & screening | dry lab + curators | ☐ |
 | 03 | LLM extraction pipeline | dry lab | ☐ |
-| 04 | Curator review tool (Streamlit) | dry lab | ☐ |
+| 04 | Curator review tool (Streamlit) | dry lab | ☑ |
 | 05 | Normalization + release build + CI | dry lab | ☐ |
 | 06 | Frontend (React, GitHub Pages) | dry lab | ◐ |
 | 07 | Methods docs, licenses, wiki | all | ☐ |
@@ -32,6 +32,8 @@ Frontend (task 06) needs Node >= 18:
 ```bash
 cd frontend && npm install && npm run dev
 ```
+
+Curators: see [CURATORS.md](CURATORS.md) and run `make review`.
 
 `pipeline/build_bundle.py` regenerates `frontend/src/data/cerd_draft.json`,
 which the app imports statically. Deployed to GitHub Pages by

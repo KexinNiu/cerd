@@ -24,8 +24,8 @@
     "source_pmid": "30863384",
     "source_quote": "Wild-type (wt, PS832) (6.6 ± 0.8) × 10 -2 (7.3 ± 0.1) × 10 -1 1.0 ± 0.1 1.0 ± 0.2",
     "extracted_by": "agent-claude",
-    "verified_by": null,
-    "verified_date": null,
+    "verified_by": "Kexin",
+    "verified_date": "2026-08-27",
     "notes": "Dormant spores dried on aluminium coupons, exposed 24 h to simulated Martian atmosphere of which 8 h with Mars-like solar UV [M(+)UV]. dose_value is the total applied UV fluence (200-400 nm, 742.5 kJ/m2); the UV-C (200-280 nm) component was 115.2 kJ/m2, UV-B 166.5 kJ/m2, UV-A 460.8 kJ/m2, so uv_band is left null (broadband). Surviving fraction is N/N0 vs unexposed spores. Value is the M(+)UV surviving fraction from Table 4/5; the second value in the quote is the M(-)UV (no-UV) condition and is not extracted here."
   },
   {
@@ -55,8 +55,8 @@
     "source_pmid": "30863384",
     "source_quote": "sspA (1.5 ± 0.2) × 10 -2+ [ + 0.0042] (2.0 ± 0.4)",
     "extracted_by": "agent-claude",
-    "verified_by": null,
-    "verified_date": null,
+    "verified_by": "Kexin",
+    "verified_date": "2026-08-27",
     "notes": "Dormant spores dried on aluminium coupons, exposed 24 h to simulated Martian atmosphere of which 8 h with Mars-like solar UV [M(+)UV]. dose_value is the total applied UV fluence (200-400 nm, 742.5 kJ/m2); the UV-C (200-280 nm) component was 115.2 kJ/m2, UV-B 166.5 kJ/m2, UV-A 460.8 kJ/m2, so uv_band is left null (broadband). Surviving fraction is N/N0 vs unexposed spores. Value is the M(+)UV surviving fraction from Table 4/5; the second value in the quote is the M(-)UV (no-UV) condition and is not extracted here."
   },
   {
@@ -86,39 +86,8 @@
     "source_pmid": "30863384",
     "source_quote": "sspB (1.7 ± 0.2) × 10 -2+ [ + 0.0058] (4.6 ± 0.1)",
     "extracted_by": "agent-claude",
-    "verified_by": null,
-    "verified_date": null,
-    "notes": "Dormant spores dried on aluminium coupons, exposed 24 h to simulated Martian atmosphere of which 8 h with Mars-like solar UV [M(+)UV]. dose_value is the total applied UV fluence (200-400 nm, 742.5 kJ/m2); the UV-C (200-280 nm) component was 115.2 kJ/m2, UV-B 166.5 kJ/m2, UV-A 460.8 kJ/m2, so uv_band is left null (broadband). Surviving fraction is N/N0 vs unexposed spores. Value is the M(+)UV surviving fraction from Table 4/5; the second value in the quote is the M(-)UV (no-UV) condition and is not extracted here."
-  },
-  {
-    "record_id": "bsubtilis-uv-30863384-04",
-    "organism": "Bacillus subtilis",
-    "taxid": 1423,
-    "strain": "sspA sspB",
-    "condition": "UV",
-    "uv_band": null,
-    "dose_value": 742.5,
-    "dose_unit": "kJ/m2",
-    "temp_c": null,
-    "temp_shift": null,
-    "exposure_time_s": 28800.0,
-    "medium": null,
-    "growth_phase": "spore",
-    "assay": "CFU",
-    "response_type": "survival",
-    "response_value": 0.00024,
-    "response_unit": "surviving_fraction",
-    "response_direction": "decrease",
-    "mechanism_reported": [
-      "alpha/beta-type SASP DNA protection"
-    ],
-    "evidence_level": "measured",
-    "source_doi": "10.3389/fmicb.2019.00333",
-    "source_pmid": "30863384",
-    "source_quote": "sspA sspB (2.4 ± 0.5) × 10 -4+ [ + 0.0002] (4.2 ± 0.9)",
-    "extracted_by": "agent-claude",
-    "verified_by": null,
-    "verified_date": null,
+    "verified_by": "Kexin",
+    "verified_date": "2026-08-27",
     "notes": "Dormant spores dried on aluminium coupons, exposed 24 h to simulated Martian atmosphere of which 8 h with Mars-like solar UV [M(+)UV]. dose_value is the total applied UV fluence (200-400 nm, 742.5 kJ/m2); the UV-C (200-280 nm) component was 115.2 kJ/m2, UV-B 166.5 kJ/m2, UV-A 460.8 kJ/m2, so uv_band is left null (broadband). Surviving fraction is N/N0 vs unexposed spores. Value is the M(+)UV surviving fraction from Table 4/5; the second value in the quote is the M(-)UV (no-UV) condition and is not extracted here."
   },
   {
