@@ -12,8 +12,8 @@ Checks per record:
   4. response_value appears in the quote (soft warning — dose and temperature
      are usually stated in Methods rather than in the quoted result sentence)
 
-Comparison ignores all whitespace: flattening JATS XML inserts spaces around
-superscripts, so "mJ/cm2" in a paper renders as "mJ/cm 2" in the cached text.
+Quote comparison is delegated to pipeline.textmatch, which folds the
+typography papers and extractors disagree about while keeping numbers exact.
 
 Usage:  python -m pipeline.audit_drafts
 """
@@ -22,14 +22,13 @@ from __future__ import annotations
 import csv
 import json
 import logging
-import re
 import sys
-import unicodedata
 from pathlib import Path
 
 from pydantic import ValidationError
 
 from pipeline.search_pubmed import REPO_ROOT
+from pipeline.textmatch import fold_str
 from schema.record_schema import Record
 
 logger = logging.getLogger(__name__)
@@ -39,27 +38,6 @@ PAPERS_DIR = REPO_ROOT / "data" / "papers"
 FULLTEXT_DIR = REPO_ROOT / "local_pdfs" / "fulltext"
 
 
-def _normalize(text: str) -> str:
-    """Fold to a comparable form.
-
-    NFKC maps Unicode superscripts to ASCII digits ("mJ/cm²" -> "mJ/cm2") and
-    stripping all whitespace absorbs the spaces JATS flattening inserts around
-    superscript elements. Dashes are folded because papers mix hyphen, en
-    dash, and minus sign freely.
-    """
-    text = unicodedata.normalize("NFKC", text).lower()
-    text = re.sub(r"[‐-―−]", "-", text)
-    # ASCII transliterations extractors produce for symbols they cannot type:
-    # "±" -> "+/-", and the multiplication sign in scientific notation.
-    text = text.replace("+/-", "").replace("±", "")
-    text = text.replace("μ", "u").replace("µ", "u")  # µM typed as uM
-    text = re.sub(r"(?<=\d)\s*[x×]\s*(?=10)", "", text)
-    # Keep only letters, digits, decimal points and minus signs. Extractors
-    # routinely retype "42 °C" as "42 C" or "5.6 x 10" for "5.6 × 10"; that is
-    # a typographic variant, not a different claim. Digits, decimal points and
-    # exponent signs are preserved so numbers still have to match.
-    # Leading/trailing dots are ellipsis or an added sentence-final period.
-    return re.sub(r"[^a-z0-9.\-]", "", text).strip(".")
 
 
 def load_candidate_index() -> dict[str, dict[str, str]]:
@@ -76,7 +54,7 @@ def load_fulltexts() -> dict[str, str]:
     if not FULLTEXT_DIR.exists():
         return {}
     return {
-        p.stem: _normalize(p.read_text()) for p in FULLTEXT_DIR.glob("PMC*.txt")
+        p.stem: fold_str(p.read_text()) for p in FULLTEXT_DIR.glob("PMC*.txt")
     }
 
 
@@ -119,7 +97,7 @@ def audit() -> tuple[list[str], list[str]]:
             if not text:
                 problems.append(f"{where}: no cached full text for {pmcid or 'unknown pmcid'}")
                 continue
-            if _normalize(rec.source_quote) not in text:
+            if fold_str(rec.source_quote) not in text:
                 problems.append(f"{where}: source_quote not found verbatim in full text")
                 continue
 

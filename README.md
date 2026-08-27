@@ -34,6 +34,7 @@ cd frontend && npm install && npm run dev
 ```
 
 Curators: see [CURATORS.md](CURATORS.md) and run `make review`.
+Picking up the work: read [docs/HANDOFF.md](docs/HANDOFF.md).
 
 `pipeline/build_bundle.py` regenerates `frontend/src/data/cerd_draft.json`,
 which the app imports statically. Deployed to GitHub Pages by
